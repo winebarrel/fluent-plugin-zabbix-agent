@@ -41,6 +41,8 @@ Or install it yourself as:
     "system.cpu.load[all,avg5]": "load_avg5",
     ...
   }
+  # or
+  #items_file /path/to/items.json
 </source>
 
 ```

@@ -11,21 +11,12 @@ class Fluent::ZabbixAgentInput < Fluent::Input
     define_method('router') { Fluent::Engine }
   end
 
-  def initialize
-    super
-    require 'csv'
-    require 'fileutils'
-    require 'logger'
-    require 'time'
-    require 'addressable/uri'
-    require 'aws-sdk'
-  end
-
   config_param :agent_host, :string,  :default => '127.0.0.1'
   config_param :agent_port, :integer, :default => 10050
   config_param :interval,   :time,    :default => 60
   config_param :tag,        :string,  :default => 'zabbix.item'
-  config_param :items,      :hash
+  config_param :items,      :hash,    :default => nil
+  config_param :items_file, :string,  :default => nil
   config_param :extra,      :hash,    :default => {}
   config_param :bulk,       :bool,    :default => false
 
@@ -33,10 +24,22 @@ class Fluent::ZabbixAgentInput < Fluent::Input
     super
     require 'socket'
     require 'zabbix_protocol'
+    require 'json'
   end
 
   def configure(conf)
     super
+
+    if @items.nil? and @items_file.nil?
+      raise Fluent::ConfigError, 'One of "items" or "items_file" is required'
+    elsif @items and @items_file
+      raise %!It isn't possible to specify both of items" and "items_file"!
+    end
+
+    if @items_file
+      @items = File.read(@items_file)
+      @items = JSON.load(@items)
+    end
 
     @items.keys.each do |key|
       value = @items[key]
