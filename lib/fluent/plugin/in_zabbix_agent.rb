@@ -86,7 +86,8 @@ class Fluent::ZabbixAgentInput < Fluent::Input
 
     TCPSocket.open(@agent_host, @agent_port) do |sock|
       sock.setsockopt(Socket::SOL_SOCKET,Socket::SO_REUSEADDR, true)
-      sock.print ZabbixProtocol.dump(key)
+      sock.write ZabbixProtocol.dump(key + "\n")
+      sock.close_write
       value = ZabbixProtocol.load(sock.read)
     end
 

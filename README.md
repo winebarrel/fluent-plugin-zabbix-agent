@@ -4,6 +4,9 @@ Fluentd input plugin for Zabbix agent.
 
 It gets items of zabbix using [passive check](https://www.zabbix.com/documentation/2.4/manual/appendix/items/activepassive#passive_checks).
 
+[![Gem Version](https://badge.fury.io/rb/fluent-plugin-zabbix-agent.svg)](http://badge.fury.io/rb/fluent-plugin-zabbix-agent)
+[![Build Status](https://travis-ci.org/winebarrel/fluent-plugin-zabbix-agent.svg)](https://travis-ci.org/winebarrel/fluent-plugin-zabbix-agent)
+
 ## Installation
 
 Add this line to your application's Gemfile:
