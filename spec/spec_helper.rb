@@ -4,6 +4,7 @@ require 'fluent/plugin/in_zabbix_agent'
 require 'json'
 require 'time'
 require 'timecop'
+require 'tempfile'
 
 # Disable Test::Unit
 module Test::Unit::RunCount; def run(*); end; end

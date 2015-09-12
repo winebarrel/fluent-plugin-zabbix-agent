@@ -14,7 +14,12 @@ describe Fluent::ZabbixAgentInput do
   end
 
   let(:fluentd_conf) { default_fluentd_conf }
-  let(:driver) { create_driver(fluentd_conf) }
+  let(:before_create_driver) { }
+
+  let(:driver) do
+    before_create_driver
+    create_driver(fluentd_conf)
+  end
 
   subject { driver.emits }
 
@@ -72,6 +77,35 @@ describe Fluent::ZabbixAgentInput do
       is_expected.to match_array [
         ["zabbix.item2", 1432492200, {"load_avg1"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg1]\n"}],
         ["zabbix.item2", 1432492200, {"system.cpu.load[all,avg5]"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg5]\n"}],
+      ]
+    end
+  end
+
+  context 'when use items file' do
+    let(:items_file) {
+      Tempfile.open('in_zabbix_agent_spec')
+    }
+
+    let(:fluentd_conf) do
+      {
+        items_file: items_file.path,
+        interval: 0,
+      }
+    end
+
+    let(:before_create_driver) do
+      items_file.puts(JSON.dump(items))
+      items_file.flush
+    end
+
+    after do
+      items_file.close
+    end
+
+    it do
+      is_expected.to match_array [
+        ["zabbix.item", 1432492200, {"load_avg1"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg5]\n"}],
       ]
     end
   end
