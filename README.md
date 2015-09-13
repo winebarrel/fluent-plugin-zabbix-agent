@@ -66,8 +66,8 @@ Or install it yourself as:
 ```
 
 ```
-2015-01-02 12:30:40 +0000 zabbix.item: {"load_avg1":0.0,"hostname":"my-host"}
-2015-01-02 12:30:40 +0000 zabbix.item: {"system.cpu.load[all,avg5]":0.01,"hostname":"my-host"}
+2015-01-02 12:30:40 +0000 zabbix.item: {"key":"load_avg1","value":0.0,"hostname":"my-host"}
+2015-01-02 12:30:40 +0000 zabbix.item: {"key":"system.cpu.load[all,avg5]","value":0.01,"hostname":"my-host"}
 ```
 
 ## Get zabbix items as a single record

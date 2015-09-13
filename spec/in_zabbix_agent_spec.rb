@@ -46,8 +46,8 @@ describe Fluent::ZabbixAgentInput do
     it do
       is_expected.to match_array [
         ["zabbix.item", 1432492200, {
-          "key"=>"load_avg1", "value"=>"system.cpu.load[all,avg1]\n",
-          "key"=>"system.cpu.load[all,avg5]", "value"=>"system.cpu.load[all,avg5]\n",
+          "load_avg1"=>"system.cpu.load[all,avg1]\n",
+          "system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n",
         }]
       ]
     end

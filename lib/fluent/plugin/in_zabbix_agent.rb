@@ -126,9 +126,17 @@ class Fluent::ZabbixAgentInput < Fluent::Input
     end
 
     if @bulk
+      records = value_by_item.map do |key, value|
+        {key => value}
+      end
+
       bulk_record = records.inject({}) {|r, i| r.merge(i) }
       router.emit(@tag, time.to_i, bulk_record.merge(extra))
     else
+      records = value_by_item.map do |key, value|
+        {@item_key_key => key, @item_val_key => value}
+      end
+
       records.each do |rcrd|
         router.emit(@tag, time.to_i, rcrd.merge(extra))
       end
