@@ -43,6 +43,8 @@ Or install it yourself as:
   }
   # or
   #items_file /path/to/items.json
+  # or
+  #items_file /path/to/conf.d/items-*.json
 </source>
 
 ```

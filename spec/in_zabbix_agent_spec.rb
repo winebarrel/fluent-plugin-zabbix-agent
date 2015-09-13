@@ -85,7 +85,7 @@ describe Fluent::ZabbixAgentInput do
 
   context 'when use items file' do
     let(:items_file) {
-      Tempfile.open('in_zabbix_agent_spec')
+      Tempfile.open('in_zabbix_agent_spec_item_file')
     }
 
     let(:fluentd_conf) do
@@ -102,6 +102,42 @@ describe Fluent::ZabbixAgentInput do
 
     after do
       items_file.close
+    end
+
+    it do
+      is_expected.to match_array [
+        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
+      ]
+    end
+  end
+
+  context 'when use multiple items files' do
+    let(:items_file1) {
+      Tempfile.open('in_zabbix_agent_spec_item_file1')
+    }
+
+    let(:items_file2) {
+      Tempfile.open('in_zabbix_agent_spec_item_file2')
+    }
+
+    let(:fluentd_conf) do
+      {
+        items_file: "{#{items_file1.path},#{items_file2.path}}",
+        interval: 0,
+      }
+    end
+
+    let(:before_create_driver) do
+      items_file1.puts(JSON.dump("system.cpu.load[all,avg1]" => "load_avg1"))
+      items_file1.flush
+      items_file2.puts(JSON.dump("system.cpu.load[all,avg5]" => nil))
+      items_file2.flush
+    end
+
+    after do
+      items_file1.close
+      items_file2.close
     end
 
     it do

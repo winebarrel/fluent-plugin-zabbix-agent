@@ -33,12 +33,21 @@ class Fluent::ZabbixAgentInput < Fluent::Input
     if @items.nil? and @items_file.nil?
       raise Fluent::ConfigError, 'One of "items" or "items_file" is required'
     elsif @items and @items_file
-      raise %!It isn't possible to specify both of items" and "items_file"!
+      raise Fluent::ConfigError, %!It isn't possible to specify both of items" and "items_file"!
     end
 
     if @items_file
-      @items = File.read(@items_file)
-      @items = JSON.load(@items)
+      @items = {}
+
+      Dir.glob(@items_file) do |path|
+        file = File.read(path)
+        json = JSON.load(file)
+        @items.update(json) if json
+      end
+    end
+
+    if @items.empty?
+      raise Fluent::ConfigError, '"items" or "items_file" is empty'
     end
 
     @items.keys.each do |key|

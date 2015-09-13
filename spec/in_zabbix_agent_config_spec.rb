@@ -80,7 +80,7 @@ describe 'Fluent::ZabbixAgentInput#configure' do
 
   context 'when pass items_file' do
     let(:items_file) {
-      Tempfile.open('in_zabbix_agent_spec')
+      Tempfile.open('in_zabbix_agent_spec_item_file')
     }
 
     let(:fluentd_conf) {
@@ -90,6 +90,10 @@ describe 'Fluent::ZabbixAgentInput#configure' do
     let(:before_create_driver) do
       items_file.puts(JSON.dump(items))
       items_file.flush
+    end
+
+    after do
+      items_file.close
     end
 
     it do
