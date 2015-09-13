@@ -22,7 +22,6 @@ RSpec.configure do |config|
     Fluent::Test.setup
     Timecop.freeze(Time.parse('2015/05/24 18:30 UTC'))
   end
-
 end
 
 def create_driver(options = {})
