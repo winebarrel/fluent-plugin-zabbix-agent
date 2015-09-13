@@ -118,4 +118,22 @@ describe 'Fluent::ZabbixAgentInput#configure' do
       )
     end
   end
+
+  context 'when pass items_file as url' do
+    let(:items_file) { "http://127.0.0.1:#{JSOND_PORT}" }
+    let(:fluentd_conf) { {items_file: items_file} }
+
+    it do
+      expect(driver.instance.agent_host).to eq '127.0.0.1'
+      expect(driver.instance.agent_port).to eq 10050
+      expect(driver.instance.interval).to eq 60
+      expect(driver.instance.tag).to eq 'zabbix.item'
+      expect(driver.instance.item_key_key).to eq 'key'
+      expect(driver.instance.item_value_key).to eq 'value'
+      expect(driver.instance.extra).to eq({})
+      expect(driver.instance.bulk).to be_falsey
+      expect(driver.instance.items_file).to eq items_file
+      expect(driver.instance.items).to eq JSOND_DATA
+    end
+  end
 end

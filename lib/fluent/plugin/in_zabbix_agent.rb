@@ -27,6 +27,7 @@ class Fluent::ZabbixAgentInput < Fluent::Input
     require 'socket'
     require 'zabbix_protocol'
     require 'json'
+    require 'open-uri'
   end
 
   def configure(conf)
@@ -41,10 +42,18 @@ class Fluent::ZabbixAgentInput < Fluent::Input
     if @items_file
       @items = {}
 
-      Dir.glob(@items_file) do |path|
-        file = File.read(path)
+      files = Dir.glob(@items_file)
+
+      if files.empty?
+        file = open(@items_file, &:read)
         json = JSON.load(file)
         @items.update(json) if json
+      else
+        Dir.glob(@items_file) do |path|
+          file = File.read(path)
+          json = JSON.load(file)
+          @items.update(json) if json
+        end
       end
     end
 

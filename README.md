@@ -47,6 +47,8 @@ Or install it yourself as:
   #items_file /path/to/items.json
   # or
   #items_file /path/to/conf.d/items-*.json
+  # or
+  #items_file http://path/to/items.json
 </source>
 
 ```
