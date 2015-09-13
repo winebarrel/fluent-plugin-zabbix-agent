@@ -215,4 +215,22 @@ describe Fluent::ZabbixAgentInput do
       expect(error_messages.first).to match /ZBX_ERROR\u0000Invalid second parameter\.: unexpected error/
     end
   end
+
+  context 'when get zabbix item_{key,val}_key' do
+    let(:extra) { {"hostname" => "my-host"} }
+
+    let(:fluentd_conf) do
+      default_fluentd_conf.merge(
+        item_key_key: 'key2',
+        item_value_key: 'value2',
+      )
+    end
+
+    it do
+      is_expected.to match_array [
+        ["zabbix.item", 1432492200, {"key2"=>"load_avg1", "value2"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"key2"=>"system.cpu.load[all,avg5]", "value2"=>"system.cpu.load[all,avg5]\n"}],
+      ]
+    end
+  end
 end

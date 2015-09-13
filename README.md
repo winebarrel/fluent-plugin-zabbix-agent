@@ -33,6 +33,8 @@ Or install it yourself as:
   #agent_port 10050
   #interval 60
   #tag zabbix.item
+  #item_key_key key
+  #item_value_key value
   #extra {}
   #bulk false
 
