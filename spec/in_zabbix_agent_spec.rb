@@ -30,8 +30,8 @@ describe Fluent::ZabbixAgentInput do
   context 'when get zabbix items' do
     it do
       is_expected.to match_array [
-        ["zabbix.item", 1432492200, {"load_avg1"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg1]\n"}],
-        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg5]\n"}],
+        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
       ]
     end
   end
@@ -44,8 +44,8 @@ describe Fluent::ZabbixAgentInput do
     it do
       is_expected.to match_array [
         ["zabbix.item", 1432492200, {
-          "load_avg1"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg1]\n",
-          "system.cpu.load[all,avg5]"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg5]\n",
+          "load_avg1"=>"system.cpu.load[all,avg1]\n",
+          "system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n",
         }]
       ]
     end
@@ -60,8 +60,8 @@ describe Fluent::ZabbixAgentInput do
 
     it do
       is_expected.to match_array [
-        ["zabbix.item", 1432492200, {"load_avg1"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg1]\n", "hostname"=>"my-host"}],
-        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg5]\n", "hostname"=>"my-host"}],
+        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n", "hostname"=>"my-host"}],
+        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n", "hostname"=>"my-host"}],
       ]
     end
   end
@@ -75,8 +75,8 @@ describe Fluent::ZabbixAgentInput do
 
     it do
       is_expected.to match_array [
-        ["zabbix.item2", 1432492200, {"load_avg1"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg1]\n"}],
-        ["zabbix.item2", 1432492200, {"system.cpu.load[all,avg5]"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg5]\n"}],
+        ["zabbix.item2", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item2", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
       ]
     end
   end
@@ -104,8 +104,8 @@ describe Fluent::ZabbixAgentInput do
 
     it do
       is_expected.to match_array [
-        ["zabbix.item", 1432492200, {"load_avg1"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg1]\n"}],
-        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"ZBXD\x01\x1A\x00\x00\x00\x00\x00\x00\x00system.cpu.load[all,avg5]\n"}],
+        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
       ]
     end
   end
