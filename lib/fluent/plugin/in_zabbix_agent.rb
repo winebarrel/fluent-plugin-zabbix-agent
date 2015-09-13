@@ -11,14 +11,16 @@ class Fluent::ZabbixAgentInput < Fluent::Input
     define_method('router') { Fluent::Engine }
   end
 
-  config_param :agent_host, :string,  :default => '127.0.0.1'
-  config_param :agent_port, :integer, :default => 10050
-  config_param :interval,   :time,    :default => 60
-  config_param :tag,        :string,  :default => 'zabbix.item'
-  config_param :items,      :hash,    :default => nil
-  config_param :items_file, :string,  :default => nil
-  config_param :extra,      :hash,    :default => {}
-  config_param :bulk,       :bool,    :default => false
+  config_param :agent_host,   :string,  :default => '127.0.0.1'
+  config_param :agent_port,   :integer, :default => 10050
+  config_param :interval,     :time,    :default => 60
+  config_param :tag,          :string,  :default => 'zabbix.item'
+  config_param :item_key_key, :string,  :default => 'key'
+  config_param :item_val_key, :string,  :default => 'value'
+  config_param :items,        :hash,    :default => nil
+  config_param :items_file,   :string,  :default => nil
+  config_param :extra,        :hash,    :default => {}
+  config_param :bulk,         :bool,    :default => false
 
   def initialize
     super
@@ -120,7 +122,7 @@ class Fluent::ZabbixAgentInput < Fluent::Input
     time = Time.now
 
     records = value_by_item.map do |key, value|
-      {key => value}
+      {@item_key_key => key, @item_val_key => value}
     end
 
     if @bulk

@@ -32,8 +32,8 @@ describe Fluent::ZabbixAgentInput do
   context 'when get zabbix items' do
     it do
       is_expected.to match_array [
-        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
-        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
+        ["zabbix.item", 1432492200, {"key"=>"load_avg1", "value"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"key"=>"system.cpu.load[all,avg5]", "value"=>"system.cpu.load[all,avg5]\n"}],
       ]
     end
   end
@@ -46,8 +46,8 @@ describe Fluent::ZabbixAgentInput do
     it do
       is_expected.to match_array [
         ["zabbix.item", 1432492200, {
-          "load_avg1"=>"system.cpu.load[all,avg1]\n",
-          "system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n",
+          "key"=>"load_avg1", "value"=>"system.cpu.load[all,avg1]\n",
+          "key"=>"system.cpu.load[all,avg5]", "value"=>"system.cpu.load[all,avg5]\n",
         }]
       ]
     end
@@ -62,8 +62,8 @@ describe Fluent::ZabbixAgentInput do
 
     it do
       is_expected.to match_array [
-        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n", "hostname"=>"my-host"}],
-        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n", "hostname"=>"my-host"}],
+        ["zabbix.item", 1432492200, {"key"=>"load_avg1", "value"=>"system.cpu.load[all,avg1]\n", "hostname"=>"my-host"}],
+        ["zabbix.item", 1432492200, {"key"=>"system.cpu.load[all,avg5]", "value"=>"system.cpu.load[all,avg5]\n", "hostname"=>"my-host"}],
       ]
     end
   end
@@ -77,8 +77,8 @@ describe Fluent::ZabbixAgentInput do
 
     it do
       is_expected.to match_array [
-        ["zabbix.item2", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
-        ["zabbix.item2", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
+        ["zabbix.item2", 1432492200, {"key"=>"load_avg1", "value"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item2", 1432492200, {"key"=>"system.cpu.load[all,avg5]", "value"=>"system.cpu.load[all,avg5]\n"}],
       ]
     end
   end
@@ -106,8 +106,8 @@ describe Fluent::ZabbixAgentInput do
 
     it do
       is_expected.to match_array [
-        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
-        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
+        ["zabbix.item", 1432492200, {"key"=>"load_avg1", "value"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"key"=>"system.cpu.load[all,avg5]", "value"=>"system.cpu.load[all,avg5]\n"}],
       ]
     end
   end
@@ -142,8 +142,8 @@ describe Fluent::ZabbixAgentInput do
 
     it do
       is_expected.to match_array [
-        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
-        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
+        ["zabbix.item", 1432492200, {"key"=>"load_avg1", "value"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"key"=>"system.cpu.load[all,avg5]", "value"=>"system.cpu.load[all,avg5]\n"}],
       ]
     end
   end
@@ -165,8 +165,8 @@ describe Fluent::ZabbixAgentInput do
 
     let(:expected_records) do
       [
-        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
-        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
+        ["zabbix.item", 1432492200, {"key"=>"load_avg1", "value"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"key"=>"system.cpu.load[all,avg5]", "value"=>"system.cpu.load[all,avg5]\n"}],
       ]
     end
 
@@ -208,8 +208,8 @@ describe Fluent::ZabbixAgentInput do
 
     it do
       is_expected.to match_array [
-        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
-        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
+        ["zabbix.item", 1432492200, {"key"=>"load_avg1", "value"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"key"=>"system.cpu.load[all,avg5]", "value"=>"system.cpu.load[all,avg5]\n"}],
       ]
 
       expect(error_messages.first).to match /ZBX_ERROR\u0000Invalid second parameter\.: unexpected error/
