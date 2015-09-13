@@ -23,6 +23,8 @@ describe 'Fluent::ZabbixAgentInput#configure' do
       expect(driver.instance.agent_port).to eq 10050
       expect(driver.instance.interval).to eq 60
       expect(driver.instance.tag).to eq 'zabbix.item'
+      expect(driver.instance.item_key_key).to eq 'key'
+      expect(driver.instance.item_value_key).to eq 'value'
       expect(driver.instance.extra).to eq({})
       expect(driver.instance.bulk).to be_falsey
       expect(driver.instance.items_file).to be_nil
@@ -58,6 +60,8 @@ describe 'Fluent::ZabbixAgentInput#configure' do
         agent_port: 10051,
         interval: 61,
         tag: 'zabbix.item2',
+        item_key_key: 'key2',
+        item_value_key: 'value2',
         extra: JSON.dump(extra),
         bulk: true
       )
@@ -68,6 +72,8 @@ describe 'Fluent::ZabbixAgentInput#configure' do
       expect(driver.instance.agent_port).to eq 10051
       expect(driver.instance.interval).to eq 61
       expect(driver.instance.tag).to eq 'zabbix.item2'
+      expect(driver.instance.item_key_key).to eq 'key2'
+      expect(driver.instance.item_value_key).to eq 'value2'
       expect(driver.instance.extra).to eq extra
       expect(driver.instance.bulk).to be_truthy
       expect(driver.instance.items_file).to be_nil
@@ -101,6 +107,8 @@ describe 'Fluent::ZabbixAgentInput#configure' do
       expect(driver.instance.agent_port).to eq 10050
       expect(driver.instance.interval).to eq 60
       expect(driver.instance.tag).to eq 'zabbix.item'
+      expect(driver.instance.item_key_key).to eq 'key'
+      expect(driver.instance.item_value_key).to eq 'value'
       expect(driver.instance.extra).to eq({})
       expect(driver.instance.bulk).to be_falsey
       expect(driver.instance.items_file).to eq items_file.path
