@@ -15,6 +15,7 @@ describe Fluent::ZabbixAgentInput do
 
   let(:fluentd_conf) { default_fluentd_conf }
   let(:before_create_driver) { }
+  let(:before_driver_run) { }
 
   let(:driver) do
     before_create_driver
@@ -24,6 +25,7 @@ describe Fluent::ZabbixAgentInput do
   subject { driver.emits }
 
   before do
+    before_driver_run
     driver.run
   end
 
@@ -107,6 +109,46 @@ describe Fluent::ZabbixAgentInput do
         ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
         ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
       ]
+    end
+  end
+
+  context 'when zabbix error' do
+    let(:items) do
+      {
+        "system.cpu.load[all,avg1]" => "load_avg1",
+        "system.cpu.load[all,avg5]" => nil,
+        zabbix_error => nil,
+      }
+    end
+
+    let(:error_messages) { [] }
+
+    let(:before_driver_run) do
+      allow(driver.instance.log).to receive(:warn) {|msg| error_messages << msg }
+    end
+
+    let(:expected_records) do
+      [
+        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
+      ]
+    end
+
+    shared_examples 'zabbix error' do
+      it do
+        is_expected.to match_array expected_records
+        expect(error_messages).to eq ["#{zabbix_error}: #{zabbix_error}\n"]
+      end
+    end
+
+    context "when ZBX_NOTSUPPORTED" do
+      let(:zabbix_error) { "ZBX_NOTSUPPORTED\x00Invalid second parameter." }
+      it_behaves_like 'zabbix error'
+    end
+
+    context "when ZBX_ERROR" do
+      let(:zabbix_error) { "ZBX_ERROR\x00Invalid second parameter." }
+      it_behaves_like 'zabbix error'
     end
   end
 end
