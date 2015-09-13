@@ -151,4 +151,32 @@ describe Fluent::ZabbixAgentInput do
       it_behaves_like 'zabbix error'
     end
   end
+
+  context 'when unexpected error' do
+    let(:zabbix_error) { "ZBX_ERROR\x00Invalid second parameter." }
+
+    let(:items) do
+      {
+        "system.cpu.load[all,avg1]" => "load_avg1",
+        "system.cpu.load[all,avg5]" => nil,
+        zabbix_error => nil,
+      }
+    end
+
+    let(:error_messages) { [] }
+
+    let(:before_driver_run) do
+      expect(driver.instance.log).to receive(:warn).with("#{zabbix_error}: #{zabbix_error}\n").and_raise('unexpected error')
+      allow(driver.instance.log).to receive(:warn) {|msg| error_messages << msg }
+    end
+
+    it do
+      is_expected.to match_array [
+        ["zabbix.item", 1432492200, {"load_avg1"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"system.cpu.load[all,avg5]"=>"system.cpu.load[all,avg5]\n"}],
+      ]
+
+      expect(error_messages.first).to match /ZBX_ERROR\u0000Invalid second parameter\.: unexpected error/
+    end
+  end
 end

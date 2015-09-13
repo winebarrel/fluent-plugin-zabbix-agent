@@ -77,12 +77,17 @@ class Fluent::ZabbixAgentInput < Fluent::Input
     value_by_item = {}
 
     @items.each do |key, record_key|
-      value = zabbix_get(key)
+      begin
+        value = zabbix_get(key)
 
-      if value =~ /\AZBX_(NOTSUPPORTED|ERROR)\x00/
-        log.warn("#{key}: #{value}")
-      else
-        value_by_item[record_key] = value
+        if value =~ /\AZBX_(NOTSUPPORTED|ERROR)\x00/
+          log.warn("#{key}: #{value}")
+        else
+          value_by_item[record_key] = value
+        end
+      rescue => e
+        log.warn("#{key}: #{e.message}")
+        log.warn_backtrace(e.backtrace)
       end
     end
 
