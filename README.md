@@ -92,3 +92,20 @@ Or install it yourself as:
 ```
 2015-01-02 12:30:40 +0000 zabbix.item: {"load_avg1":0.06,"system.cpu.load[all,avg5]":0.03,"hostname":"my-server"}
 ```
+
+### Hash record key
+
+```apache
+<source>
+  type zabbix_agent
+  extra {"hostname", "my-host"}
+  items {
+    "system.cpu.load[all,avg1]": {"name": "load_avg1", "source": "all"}
+  }
+</source>
+
+```
+
+```
+2015-01-02 12:30:40 +0000 zabbix.item: {"name":"load_avg1","source":"all","value":0.0,"hostname":"my-host"}
+```

@@ -35,12 +35,19 @@ describe 'Fluent::ZabbixAgentInput#configure' do
     end
   end
 
-  context 'when default' do
+  context 'when record_keykey is Hash' do
+    {
+      "system.cpu.load[all,avg1]" => {"key" => "load_avg1", "source" => "all"},
+      "system.cpu.load[all,avg5]" => nil,
+    }
+
     it do
       expect(driver.instance.agent_host).to eq '127.0.0.1'
       expect(driver.instance.agent_port).to eq 10050
       expect(driver.instance.interval).to eq 60
       expect(driver.instance.tag).to eq 'zabbix.item'
+      expect(driver.instance.item_key_key).to eq 'key'
+      expect(driver.instance.item_value_key).to eq 'value'
       expect(driver.instance.extra).to eq({})
       expect(driver.instance.bulk).to be_falsey
       expect(driver.instance.items_file).to be_nil

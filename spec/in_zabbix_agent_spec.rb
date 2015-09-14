@@ -69,8 +69,6 @@ describe Fluent::ZabbixAgentInput do
   end
 
   context 'when get zabbix items with tag' do
-    let(:extra) { {"hostname" => "my-host"} }
-
     let(:fluentd_conf) do
       default_fluentd_conf.merge(tag: 'zabbix.item2')
     end
@@ -217,8 +215,6 @@ describe Fluent::ZabbixAgentInput do
   end
 
   context 'when get zabbix item_{key,val}_key' do
-    let(:extra) { {"hostname" => "my-host"} }
-
     let(:fluentd_conf) do
       default_fluentd_conf.merge(
         item_key_key: 'key2',
@@ -230,6 +226,22 @@ describe Fluent::ZabbixAgentInput do
       is_expected.to match_array [
         ["zabbix.item", 1432492200, {"key2"=>"load_avg1", "value2"=>"system.cpu.load[all,avg1]\n"}],
         ["zabbix.item", 1432492200, {"key2"=>"system.cpu.load[all,avg5]", "value2"=>"system.cpu.load[all,avg5]\n"}],
+      ]
+    end
+  end
+
+  context 'when record_key is Hash' do
+    let(:items) do
+      {
+        "system.cpu.load[all,avg1]" => {"name"=>"load_avg1","source"=>"all"},
+        "system.cpu.load[all,avg5]" => nil,
+      }
+    end
+
+    it do
+      is_expected.to match_array [
+        ["zabbix.item", 1432492200, {"name"=>"load_avg1", "source"=>"all", "value"=>"system.cpu.load[all,avg1]\n"}],
+        ["zabbix.item", 1432492200, {"key"=>"system.cpu.load[all,avg5]", "value"=>"system.cpu.load[all,avg5]\n"}],
       ]
     end
   end

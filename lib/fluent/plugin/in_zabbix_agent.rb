@@ -139,7 +139,11 @@ class Fluent::ZabbixAgentInput < Fluent::Input
       router.emit(@tag, time.to_i, bulk_record.merge(extra))
     else
       records = value_by_item.map do |key, value|
-        {@item_key_key => key, @item_value_key => value}
+        if key.is_a?(Hash)
+          key.merge(@item_value_key => value)
+        else
+          {@item_key_key => key, @item_value_key => value}
+        end
       end
 
       records.each do |rcrd|
