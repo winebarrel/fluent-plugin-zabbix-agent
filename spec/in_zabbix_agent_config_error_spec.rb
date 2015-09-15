@@ -1,14 +1,4 @@
 describe 'Fluent::ZabbixAgentInput#configure (error)' do
-  let(:items) do
-    {
-      "system.cpu.load[all,avg1]" => "load_avg1",
-      "system.cpu.load[all,avg5]" => nil,
-    }
-  end
-
-  let(:default_fluentd_conf) { {items: JSON.dump(items)} }
-  let(:fluentd_conf) { default_fluentd_conf }
-
   context 'when not pass item and items_file' do
     it do
       expect {
@@ -18,6 +8,13 @@ describe 'Fluent::ZabbixAgentInput#configure (error)' do
   end
 
   context 'when pass item and items_file' do
+    let(:items) do
+      {
+        "system.cpu.load[all,avg1]" => "load_avg1",
+        "system.cpu.load[all,avg5]" => nil,
+      }
+    end
+
     it do
       expect {
         create_driver(
@@ -51,4 +48,16 @@ describe 'Fluent::ZabbixAgentInput#configure (error)' do
     end
   end
 
+  context 'when items is empty with allow_items_empty' do
+    let(:items) { {} }
+
+    it do
+      expect {
+        create_driver(
+          items: items,
+          allow_items_empty: true
+        )
+      }.to_not raise_error
+    end
+  end
 end

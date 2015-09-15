@@ -37,6 +37,7 @@ Or install it yourself as:
   #item_value_key value
   #extra {}
   #bulk false
+  #allow_items_empty false
 
   items {
     "system.cpu.load[all,avg1]": "load_avg1",
