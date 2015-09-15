@@ -248,7 +248,25 @@ describe Fluent::ZabbixAgentInput do
 
   context 'when get zabbix items with allow_items_empty' do
     let(:items) { {} }
-    let(:fluentd_conf) { default_fluentd_conf.merge(allow_items_empty: true) }
+
+    let(:fluentd_conf) do
+      default_fluentd_conf.merge(allow_items_empty: true)
+    end
+
+    it do
+      is_expected.to be_empty
+    end
+  end
+
+  context 'when get zabbix items with bulk/allow_items_empty' do
+    let(:items) { {} }
+
+    let(:fluentd_conf) do
+      default_fluentd_conf.merge(
+        allow_items_empty: true,
+        bulk: true
+      )
+    end
 
     it do
       is_expected.to be_empty

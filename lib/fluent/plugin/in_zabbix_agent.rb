@@ -112,7 +112,9 @@ class Fluent::ZabbixAgentInput < Fluent::Input
       end
     end
 
-    emit_items(value_by_item)
+    unless value_by_item.empty?
+      emit_items(value_by_item)
+    end
   end
 
   def zabbix_get(key)
