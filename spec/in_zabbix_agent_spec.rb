@@ -272,4 +272,24 @@ describe Fluent::ZabbixAgentInput do
       is_expected.to be_empty
     end
   end
+
+  context 'when get zabbix items with hostname' do
+    let(:fluentd_conf) do
+      default_fluentd_conf.merge(
+        include_hostname: true,
+        hostname_key: 'hostname2'
+      )
+    end
+
+    let(:before_create_driver) do
+      allow_any_instance_of(Fluent::ZabbixAgentInput).to receive(:hostname) { 'my-host2' }
+    end
+
+    it do
+      is_expected.to match_array [
+        ["zabbix.item", 1432492200, {"key"=>"load_avg1", "value"=>"system.cpu.load[all,avg1]\n", "hostname2"=>"my-host2"}],
+        ["zabbix.item", 1432492200, {"key"=>"system.cpu.load[all,avg5]", "value"=>"system.cpu.load[all,avg5]\n", "hostname2"=>"my-host2"}],
+      ]
+    end
+  end
 end

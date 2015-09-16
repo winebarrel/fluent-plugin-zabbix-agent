@@ -15,7 +15,7 @@ describe 'Fluent::ZabbixAgentInput#configure' do
     create_driver(fluentd_conf)
   end
 
-  subject { create_driver(fluentd_conf).instance }
+  subject { driver.instance }
 
   context 'when default' do
     it do
@@ -28,6 +28,9 @@ describe 'Fluent::ZabbixAgentInput#configure' do
       expect(driver.instance.extra).to eq({})
       expect(driver.instance.bulk).to be_falsey
       expect(driver.instance.items_file).to be_nil
+      expect(driver.instance.allow_items_empty).to be_falsey
+      expect(driver.instance.include_hostname).to be_falsey
+      expect(driver.instance.hostname_key).to eq 'hostname'
 
       expect(driver.instance.items).to eq items.merge(
         "system.cpu.load[all,avg5]" => "system.cpu.load[all,avg5]"
@@ -51,6 +54,9 @@ describe 'Fluent::ZabbixAgentInput#configure' do
       expect(driver.instance.extra).to eq({})
       expect(driver.instance.bulk).to be_falsey
       expect(driver.instance.items_file).to be_nil
+      expect(driver.instance.allow_items_empty).to be_falsey
+      expect(driver.instance.include_hostname).to be_falsey
+      expect(driver.instance.hostname_key).to eq 'hostname'
 
       expect(driver.instance.items).to eq items.merge(
         "system.cpu.load[all,avg5]" => "system.cpu.load[all,avg5]"
@@ -59,7 +65,12 @@ describe 'Fluent::ZabbixAgentInput#configure' do
   end
 
   context 'when not default' do
-    let(:extra) { {"hostname" => "my-host"} }
+    let(:extra) do
+      {
+        "hostname" => "my-host",
+        "hostname2" => "my-host2",
+      }
+    end
 
     let(:fluentd_conf) do
       default_fluentd_conf.merge(
@@ -70,8 +81,15 @@ describe 'Fluent::ZabbixAgentInput#configure' do
         item_key_key: 'key2',
         item_value_key: 'value2',
         extra: JSON.dump(extra),
-        bulk: true
+        bulk: true,
+        allow_items_empty: true,
+        include_hostname: true,
+        hostname_key: 'hostname2'
       )
+    end
+
+    let(:before_create_driver) do
+      allow_any_instance_of(Fluent::ZabbixAgentInput).to receive(:hostname) { 'my-host2' }
     end
 
     it do
@@ -84,6 +102,9 @@ describe 'Fluent::ZabbixAgentInput#configure' do
       expect(driver.instance.extra).to eq extra
       expect(driver.instance.bulk).to be_truthy
       expect(driver.instance.items_file).to be_nil
+      expect(driver.instance.allow_items_empty).to be_truthy
+      expect(driver.instance.include_hostname).to be_truthy
+      expect(driver.instance.hostname_key).to eq 'hostname2'
 
       expect(driver.instance.items).to eq items.merge(
         "system.cpu.load[all,avg5]" => "system.cpu.load[all,avg5]"
@@ -119,6 +140,9 @@ describe 'Fluent::ZabbixAgentInput#configure' do
       expect(driver.instance.extra).to eq({})
       expect(driver.instance.bulk).to be_falsey
       expect(driver.instance.items_file).to eq items_file.path
+      expect(driver.instance.allow_items_empty).to be_falsey
+      expect(driver.instance.include_hostname).to be_falsey
+      expect(driver.instance.hostname_key).to eq 'hostname'
 
       expect(driver.instance.items).to eq items.merge(
         "system.cpu.load[all,avg5]" => "system.cpu.load[all,avg5]"
@@ -141,6 +165,9 @@ describe 'Fluent::ZabbixAgentInput#configure' do
       expect(driver.instance.bulk).to be_falsey
       expect(driver.instance.items_file).to eq items_file
       expect(driver.instance.items).to eq JSOND_DATA
+      expect(driver.instance.allow_items_empty).to be_falsey
+      expect(driver.instance.include_hostname).to be_falsey
+      expect(driver.instance.hostname_key).to eq 'hostname'
     end
   end
 end

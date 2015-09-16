@@ -38,6 +38,8 @@ Or install it yourself as:
   #extra {}
   #bulk false
   #allow_items_empty false
+  #include_hostname false
+  #hostname_key hostname
 
   items {
     "system.cpu.load[all,avg1]": "load_avg1",

@@ -22,6 +22,8 @@ class Fluent::ZabbixAgentInput < Fluent::Input
   config_param :extra,             :hash,    :default => {}
   config_param :bulk,              :bool,    :default => false
   config_param :allow_items_empty, :bool,    :default => false
+  config_param :include_hostname,  :bool,    :default => false
+  config_param :hostname_key,      :string,  :default => 'hostname'
 
   def initialize
     super
@@ -63,6 +65,10 @@ class Fluent::ZabbixAgentInput < Fluent::Input
     @items.keys.each do |key|
       value = @items[key]
       @items[key] = key if value.nil?
+    end
+
+    if @include_hostname
+      @extra.update(@hostname_key => hostname)
     end
   end
 
@@ -149,6 +155,10 @@ class Fluent::ZabbixAgentInput < Fluent::Input
         router.emit(@tag, Fluent::Engine.now, rcrd.merge(extra))
       end
     end
+  end
+
+  def hostname
+    `hostname`.strip
   end
 
   class TimerWatcher < Coolio::TimerWatcher
