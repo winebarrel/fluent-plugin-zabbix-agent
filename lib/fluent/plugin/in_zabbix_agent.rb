@@ -43,9 +43,7 @@ class Fluent::ZabbixAgentInput < Fluent::Input
     if @items_file
       @items = {}
 
-      files = Dir.glob(@items_file)
-
-      if files.empty?
+      if @items_file =~ %r{\A(https?|ftp)://}
         file = open(@items_file, &:read)
         json = JSON.load(file)
         @items.update(json) if json
