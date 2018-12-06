@@ -1,3 +1,4 @@
+require 'fluent/input'
 require 'fluent_plugin_zabbix_agent/version'
 
 class Fluent::ZabbixAgentInput < Fluent::Input
@@ -87,6 +88,7 @@ class Fluent::ZabbixAgentInput < Fluent::Input
 
     # XXX: Comment out for exit soon. Is it OK?
     #@thread.join
+    super
   end
 
   private
