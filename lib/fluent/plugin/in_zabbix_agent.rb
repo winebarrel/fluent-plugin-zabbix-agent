@@ -1,3 +1,4 @@
+require 'fluent/input'
 require 'fluent_plugin_zabbix_agent/version'
 
 class Fluent::ZabbixAgentInput < Fluent::Input
