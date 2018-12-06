@@ -88,6 +88,7 @@ class Fluent::ZabbixAgentInput < Fluent::Input
 
     # XXX: Comment out for exit soon. Is it OK?
     #@thread.join
+    super
   end
 
   private
